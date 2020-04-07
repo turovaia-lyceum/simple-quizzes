@@ -10,6 +10,8 @@ class Option(SqlAlchemyBase):
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     text = sa.Column(sa.String)
 
+    is_answer = sa.Column(sa.Boolean, default=False)
+
     question_id = sa.Column(sa.Integer, sa.ForeignKey('question.id'))
     question = orm.relation('Question')
 

@@ -2,7 +2,18 @@
 
 {% block content %}
     <h2>{{ quiz.name }}</h2>
-    {% for question in quiz.questions %}
-        <h3>{{ question.text }}</h3>
-    {% endfor %}
+    <h3>{{ question.text }}</h3>
+    <form>
+        {% for opt in options %}
+            <input type="hidden" name="options[]" value="{{ opt }}">
+        {% endfor %}
+
+        <input type="hidden" name="question" value="{{ question.id }}">
+        {% for option in question.options %}
+            <label>
+                <input type="radio" name="option" value="{{ option.id }}">{{ option.text }}<br>
+            </label>
+        {% endfor %}
+        <input type="submit" value="Следующий">
+    </form>
 {% endblock %}

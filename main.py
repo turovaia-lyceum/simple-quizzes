@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from data import db_session
 from data.option import Option
@@ -26,10 +26,34 @@ def main():
         if not quiz:
             return 'Quiz with that id not found'
 
-        return render_template('quiz.html', quiz=quiz)
+        options = request.args.getlist('options[]')
+        print(options)
+        if not options:
+            options = []
+
+        option = request.args.get('option')
+
+        if not option:
+            next_question = quiz.questions[0]
+        else:
+            options.append(option)
+            options_info = session.query(Option).filter(Option.id.in_(options)).all()
+            questions_ids = [option.question_id for option in options_info]
+            next_question = session.query(Question).filter(quiz_id == quiz.id,
+                                                           Question.id.notin_(questions_ids)).first()
+
+            if not next_question:
+                right_cnt = len(session.query(Option).filter(Option.id.in_(options), Option.is_answer).all())
+                return render_template('results.html', quiz=quiz, score=right_cnt)
+
+        return render_template('quiz.html', quiz=quiz, question=next_question, options=options)
 
     app.debug = True
     app.run()
+
+    @app.route('/new_quiz')
+    def new_quiz():
+        pass
 
 
 def fill_data():
@@ -43,7 +67,7 @@ def fill_data():
     option1 = Option(text='int', question=question1)
     # session.add(option1)
     option2 = Option(text='string', question=question1)
-    option3 = Option(text='str', question=question1)
+    option3 = Option(text='str', question=question1, is_answer=True)
     option4 = Option(text='char', question=question1)
 
     session.add(option1)
@@ -54,8 +78,10 @@ def fill_data():
     question2 = Question(text='2 + 2?', quiz=quiz1)
     option1 = Option(text='2', question=question2)
     option2 = Option(text='3', question=question2)
-    option3 = Option(text='4', question=question2)
+    option3 = Option(text='4', question=question2, is_answer=True)
     option4 = Option(text='5', question=question2)
+
+    question2.correct_option = option3
 
     session.add(option1)
     session.add(option2)
