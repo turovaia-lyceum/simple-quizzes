@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ quiz.name }}</h2>
+    {% for question in quiz.questions %}
+        <h3>{{ question.text }}</h3>
+    {% endfor %}
+{% endblock %}
