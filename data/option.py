@@ -11,7 +11,7 @@ class Option(SqlAlchemyBase):
     text = sa.Column(sa.String)
 
     question_id = sa.Column(sa.Integer, sa.ForeignKey('question.id'))
-    question = orm.relation('Quiz')
+    question = orm.relation('Question')
 
     def __repr__(self):
         return f'<Option> {self.id} {self.text}'
