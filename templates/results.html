@@ -3,7 +3,7 @@
 {% block nav %}
     <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Главная</a></li>
     <li class="breadcrumb-item active" aria-current="page">
-        <a href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">{{ quiz.name }}</a>
+        <a href="{{ url_for('quiz', quiz_id=quiz.id) }}">{{ quiz.name }}</a>
     </li>
     <li class="breadcrumb-item">Результат</li>
 {% endblock %}
@@ -13,7 +13,7 @@
         <div class="card-header">{{ quiz.name }}</div>
         <div class="card-body">
             <p>Вы ответили на все вопросы. Ваш результат {{ score }} {{ score_noun }}!</p>
-            <a class="btn btn-outline-primary btn-block" href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">Пройти еще
+            <a class="btn btn-outline-primary btn-block" href="{{ url_for('quiz', quiz_id=quiz.id) }}">Пройти еще
                 раз</a>
         </div>
     </div>

@@ -14,14 +14,14 @@ def main():
     morph = MorphAnalyzer()
 
     @app.route('/')
-    @app.route('/quizzes')
+    @app.route('/index')
     def index():
         session = db_session.create_session()
         quizzes = session.query(Quiz).all()
         return render_template('index.html', quizzes=quizzes)
 
     @app.route('/quiz/<int:quiz_id>')
-    def show_quiz(quiz_id):
+    def quiz(quiz_id):
         session = db_session.create_session()
         quiz = session.query(Quiz).get(quiz_id)
 
@@ -29,12 +29,10 @@ def main():
             return 'Quiz with that id not found'
 
         options = request.args.getlist('options[]')
-        print(options)
         if not options:
             options = []
 
         option = request.args.get('option')
-
         is_submitted = 'submitted' in request.args
 
         if not is_submitted:

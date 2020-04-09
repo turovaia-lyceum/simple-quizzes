@@ -9,7 +9,7 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h3 class="card-title">{{ quiz.name }}</h3>
-                <a class="btn btn-outline-success" href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">Пройти</a>
+                <a class="btn btn-outline-success" href="{{ url_for('quiz', quiz_id=quiz.id) }}">Пройти</a>
                 <a class="btn btn-outline-secondary"
                    href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}">Редактировать</a>
                 <a class="btn btn-outline-danger" href="{{ url_for('delete_quiz', quiz_id=quiz.id) }}">Удалить</a><br>

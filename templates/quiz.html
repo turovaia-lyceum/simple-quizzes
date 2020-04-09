@@ -3,7 +3,7 @@
 {% block nav %}
     <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Главная</a></li>
     <li class="breadcrumb-item active" aria-current="page">
-        <a href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">{{ quiz.name }}</a>
+        <a href="{{ url_for('quiz', quiz_id=quiz.id) }}">{{ quiz.name }}</a>
     </li>
 {% endblock %}
 
@@ -30,7 +30,7 @@
                 </ul>
                 <input type="hidden" name="submitted">
                 <input class="btn btn-outline-success btn-block" type="submit" value="Следующий">
-                <a class="btn btn-outline-danger btn-block" href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">Начать
+                <a class="btn btn-outline-danger btn-block" href="{{ url_for('quiz', quiz_id=quiz.id) }}">Начать
                     сначала</a>
             </form>
         </div>
