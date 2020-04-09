@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 from data import db_session
 from data.option import Option
@@ -33,13 +33,16 @@ def main():
 
         option = request.args.get('option')
 
-        if not option:
+        is_submitted = 'submitted' in request.args
+
+        if not is_submitted:
             next_question = quiz.questions[0]
         else:
-            options.append(option)
+            if option:
+                options.append(option)
             options_info = session.query(Option).filter(Option.id.in_(options)).all()
             questions_ids = [option.question_id for option in options_info]
-            next_question = session.query(Question).filter(quiz_id == quiz.id,
+            next_question = session.query(Question).filter(Question.quiz_id == quiz.id,
                                                            Question.id.notin_(questions_ids)).first()
 
             if not next_question:
@@ -50,10 +53,6 @@ def main():
 
     app.debug = True
     app.run()
-
-    @app.route('/new_quiz')
-    def new_quiz():
-        pass
 
 
 def fill_data():

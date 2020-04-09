@@ -14,6 +14,7 @@
                 <input type="radio" name="option" value="{{ option.id }}">{{ option.text }}<br>
             </label>
         {% endfor %}
+        <input type="hidden" name="submitted">
         <input type="submit" value="Следующий">
     </form>
 {% endblock %}
