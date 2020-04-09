@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post">
+        Вопросы:
+        <ol>
+            {% for question in quiz.questions %}
+                <li>{{ question.text }}
+                    <a href="{{ url_for('edit_question', question_id=question.id) }}">Редактировать</a>
+                    <a href="{{ url_for('delete_question', question_id=question.id) }}">Удалить</a>
+                </li>
+            {% endfor %}
+
+            <li>
+                <input type="text" name="question_text">
+                <input type="submit" value="Добавить">
+            </li>
+        </ol>
+    </form>
+{% endblock %}

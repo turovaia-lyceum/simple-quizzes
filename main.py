@@ -51,6 +51,116 @@ def main():
 
         return render_template('quiz.html', quiz=quiz, question=next_question, options=options)
 
+    @app.route('/quiz/new', methods=['GET', 'POST'])
+    def add_quiz():
+        if request.method == 'GET':
+            return render_template('add_quiz.html')
+        elif request.method == 'POST':
+            name = request.form.get('quiz_name', '').strip()
+            if not name:
+                return "Can't create quiz with blank name"
+            session = db_session.create_session()
+            quiz = Quiz(name=name)
+            session.add(quiz)
+            session.commit()
+
+            return redirect(url_for('edit_quiz', quiz_id=quiz.id))
+
+    @app.route('/quiz/<int:quiz_id>/edit', methods=['GET', 'POST'])
+    def edit_quiz(quiz_id):
+        if request.method == 'GET':
+            session = db_session.create_session()
+            quiz = session.query(Quiz).get(quiz_id)
+            if not quiz:
+                return 'Quiz with that id not found'
+            return render_template('edit_quiz.html', quiz=quiz)
+        elif request.method == 'POST':
+            question_text = request.form.get('question_text', '')
+            if not question_text:
+                return "Can't create question with blank text"
+
+            session = db_session.create_session()
+            question = Question(text=question_text, quiz_id=quiz_id)
+            session.add(question)
+            option = Option(text='Ответ 1', is_answer=True, question=question)
+            session.add(option)
+            session.commit()
+
+            return redirect(url_for('edit_quiz', quiz_id=quiz_id))
+
+    @app.route('/quiz/<int:quiz_id>/delete', methods=['GET'])
+    def delete_quiz(quiz_id):
+        session = db_session.create_session()
+        quiz = session.query(Quiz).get(quiz_id)
+        if not quiz:
+            return 'Quiz with that id not found'
+        session.delete(quiz)
+        session.commit()
+
+        return redirect(url_for('index'))
+
+    @app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
+    def edit_question(question_id):
+        session = db_session.create_session()
+
+        if request.method == 'GET':
+            question = session.query(Question).get(question_id)
+            if not question:
+                return 'Question with that id not found'
+            return render_template('edit_question.html', question=question)
+        elif request.method == 'POST':
+            question = session.query(Question).get(question_id)
+            if 'question_text' in request.form:
+                question_text = request.form.get('question_text', '')
+                if not question_text:
+                    return "Can't update question text to blank"
+
+                question.text = question_text
+
+                right_option_id = int(request.form.get('right_option', -1))
+                for option in session.query(Option).filter(Option.question_id == question_id):
+                    if option.id == right_option_id:
+                        option.is_answer = True
+                    else:
+                        option.is_answer = False
+
+                session.commit()
+            if 'option_text' in request.form:
+                option_text = request.form.get('option_text', '')
+                if not option_text.strip():
+                    return "Can't set option text blank"
+                if 'option_edit' in request.form:
+                    option_id = int(request.form.get('option_id', -1))
+                    option = session.query(Option).get(option_id)
+                    option.text = option_text
+                    session.commit()
+                if 'option_delete' in request.form:
+                    option_id = int(request.form.get('option_id', -1))
+                    option = session.query(Option).get(option_id)
+                    session.delete(option)
+                    session.commit()
+                elif 'option_add' in request.form:
+                    is_answer = len(question.options) == 0
+                    option = Option(text=option_text, question_id=question_id, is_answer=is_answer)
+                    session.add(option)
+                    session.commit()
+
+            return redirect(url_for('edit_question', question_id=question_id))
+
+    @app.route('/question/<int:question_id>/delete')
+    def delete_question(question_id):
+        session = db_session.create_session()
+
+        question = session.query(Question).get(question_id)
+        quiz_id = question.quiz_id
+        if not question:
+            return 'Question with that id not found'
+
+        session.delete(question)
+        session.commit()
+
+        return redirect(url_for('edit_quiz', quiz_id=quiz_id))
+
     app.debug = True
     app.run()
 
