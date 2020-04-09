@@ -12,7 +12,7 @@ class Option(SqlAlchemyBase):
 
     is_answer = sa.Column(sa.Boolean, default=False)
 
-    question_id = sa.Column(sa.Integer, sa.ForeignKey('question.id'))
+    question_id = sa.Column(sa.Integer, sa.ForeignKey('question.id', ondelete="CASCADE"))
     question = orm.relation('Question')
 
     def __repr__(self):

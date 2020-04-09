@@ -10,7 +10,7 @@ class Question(SqlAlchemyBase):
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     text = sa.Column(sa.String)
 
-    quiz_id = sa.Column(sa.Integer, sa.ForeignKey('quiz.id'))
+    quiz_id = sa.Column(sa.Integer, sa.ForeignKey('quiz.id', ondelete="CASCADE"))
     quiz = orm.relation('Quiz')
 
     options = orm.relation("Option", back_populates='question')
