@@ -187,13 +187,23 @@ def fill_data():
     session.add(option3)
     session.add(option4)
 
-    question2 = Question(text='2 + 2?', quiz=quiz1)
-    option1 = Option(text='2', question=question2)
-    option2 = Option(text='3', question=question2)
-    option3 = Option(text='4', question=question2, is_answer=True)
-    option4 = Option(text='5', question=question2)
+    question2 = Question(text='Выберите название переменной, удовлетворяющее PEP8', quiz=quiz1)
+    option1 = Option(text='MyVariableName', question=question2)
+    option2 = Option(text='my_variable_name', question=question2, is_answer=True)
+    option3 = Option(text='my-variable-name', question=question2)
+    option4 = Option(text='My-Variable-Name', question=question2)
 
-    question2.correct_option = option3
+    session.add(option1)
+    session.add(option2)
+    session.add(option3)
+    session.add(option4)
+
+    question3 = Question(text=r'Какая из предложенных строк выводит строчку "/Привет, Яндекс!\" (в кавычках)',
+                         quiz=quiz1)
+    option1 = Option(text=r'print("/Привет, Яндекс!\\")', question=question3)
+    option2 = Option(text=r'''print('\"/Привет\, Яндекс!\\"')''', question=question3)
+    option3 = Option(text=r'''print(r""/Привет, Яндекс!\\"")''', question=question3)
+    option4 = Option(text=r'print("\"/Привет, Яндекс!\\\"")', question=question3, is_answer=True)
 
     session.add(option1)
     session.add(option2)
