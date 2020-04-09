@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
+{% block nav %}
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Главная</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Создание викторины</li>
+{% endblock %}
+
 {% block content %}
-    <form method="post">
-        <label>
-            Название викторины
-            <input type="text" name="quiz_name" value="Новая викторина">
-        </label><br>
-        <input type="submit" value="Создать">
+    <form class="card" method="post">
+        <div class="card-header">Создание викторины</div>
+        <div class="card-body">
+            <div class="form-group mx-auto">
+                <label for="quizNameInput">Название викторины</label>
+                <input class="form-control" id="quizNameInput" type="text" name="quiz_name" value="Новая викторина">
+            </div>
+            <input class="btn btn-primary btn-lg btn-block" type="submit" value="Создать">
+        </div>
     </form>
 {% endblock %}

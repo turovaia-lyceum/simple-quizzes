@@ -1,20 +1,37 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <form method="post">
-        Вопросы:
-        <ol>
-            {% for question in quiz.questions %}
-                <li>{{ question.text }}
-                    <a href="{{ url_for('edit_question', question_id=question.id) }}">Редактировать</a>
-                    <a href="{{ url_for('delete_question', question_id=question.id) }}">Удалить</a>
-                </li>
-            {% endfor %}
+{% block nav %}
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Главная</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Редактирование викторины</li>
+{% endblock %}
 
-            <li>
-                <input type="text" name="question_text">
-                <input type="submit" value="Добавить">
-            </li>
-        </ol>
+{% block content %}
+    <form class="card" method="post">
+        <div class="card-header">Вопросы:</div>
+        <div class="card-body">
+            <ol>
+                {% for question in quiz.questions %}
+
+                    <li class="mb-3">
+                        <div class="d-flex">
+                            <div class="flex-fill mr-1">{{ question.text }}</div>
+                            <a class="btn btn-outline-secondary btn-sm mr-1"
+                               href="{{ url_for('edit_question', question_id=question.id) }}">Редактировать</a>
+                            <a class="btn btn-outline-danger btn-sm"
+                               href="{{ url_for('delete_question', question_id=question.id) }}">Удалить</a>
+                        </div>
+                    </li>
+
+                {% endfor %}
+
+                <li>
+                    <div class="form-inline">
+                        <input class="form-control flex-fill mr-1" type="text" name="question_text">
+                        <input class="btn btn-info" type="submit" value="Добавить">
+                    </div>
+
+                </li>
+            </ol>
+        </div>
     </form>
 {% endblock %}

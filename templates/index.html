@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 
+{% block nav %}
+    <li class="breadcrumb-item active" aria-current="page">Главная</li>
+{% endblock %}
+
 {% block content %}
     {% for quiz in quizzes %}
-        <a href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">{{ quiz.name }}</a>
-        <a href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}">Редактировать</a>
-        <a href="{{ url_for('delete_quiz', quiz_id=quiz.id) }}">Удалить</a><br>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title">{{ quiz.name }}</h3>
+                <a class="btn btn-outline-success" href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">Пройти</a>
+                <a class="btn btn-outline-secondary"
+                   href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}">Редактировать</a>
+                <a class="btn btn-outline-danger" href="{{ url_for('delete_quiz', quiz_id=quiz.id) }}">Удалить</a><br>
+            </div>
+        </div>
     {% endfor %}
-    <a href="{{ url_for('add_quiz') }}">Создать викторину</a><br>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('add_quiz') }}">Создать викторину</a><br>
 {% endblock %}

@@ -1,40 +1,60 @@
 {% extends 'base.html' %}
 
+{% block nav %}
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Главная</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a href="{{ url_for('edit_quiz', quiz_id=question.quiz_id) }}">Редактирование
+        викторины</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Редактирование вопроса</li>
+{% endblock %}
+
 {% block content %}
-    <form method="post">
-        <label>
-            Текст вопроса
-            <input type="text" name="question_text" value="{{ question.text }}">
-        </label><br>
-        <label>
-            Правильный ответ
-            <select name="right_option">
-                {% for option in question.options %}
-                    <option value="{{ option.id }}"
-                            {% if option.is_answer %}selected{% endif %}>{{ option.text }}</option>
-                {% endfor %}
-            </select>
-        </label><br>
-        <input type="submit" value="Изменить настройки вопроса">
+    <form class="card mb-3" method="post">
+        <div class="card-header">Настройки вопроса</div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="question-text">Текст вопроса</label>
+                <input class="form-control" id="question-text" type="text" name="question_text"
+                       value="{{ question.text }}">
+
+            </div>
+            <div class="form-group">
+                <label for="right-option">Правильный ответ</label>
+                <select class="form-control" id="right-option" name="right_option">
+                    {% for option in question.options %}
+                        <option value="{{ option.id }}"
+                                {% if option.is_answer %}selected{% endif %}>{{ option.text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input class="btn btn-primary btn-block" type="submit" value="Изменить настройки вопроса">
+        </div>
     </form>
-    <ol>
-        {% for option in question.options %}
-            <li>
-                <form method="post">
-                    <input type="hidden" name="option_id" value="{{ option.id }}">
-                    <input type="text" name="option_text" value="{{ option.text }}">
-                    <input type="submit" name="option_edit" value="Изменить">
-                    {% if question.options|length != 1 %}
-                        <input type="submit" name="option_delete" value="Удалить">
-                    {% endif %}
-                </form>
-            </li>
-        {% endfor %}
-        <li>
-            <form method="post">
-                <input type="text" name="option_text">
-                <input type="submit" name="option_add" value="Добавить">
-            </form>
-        </li>
-    </ol>
+    <div class="card">
+        <div class="card-header">Опции</div>
+        <div class="card-body">
+            <ol>
+                {% for option in question.options %}
+                    <li class="mb-3">
+                        <form class="form-inline" method="post">
+                            <input type="hidden" name="option_id" value="{{ option.id }}">
+                            <input class="form-control flex-fill mr-1" type="text" name="option_text"
+                                   value="{{ option.text }}">
+                            <input class="btn btn-outline-secondary mr-1" type="submit" name="option_edit"
+                                   value="Изменить">
+                            {% if question.options|length != 1 %}
+                                <input class="btn btn-outline-danger" type="submit" name="option_delete"
+                                       value="Удалить">
+                            {% endif %}
+                        </form>
+                    </li>
+                {% endfor %}
+                <li>
+                    <form class="form-inline" method="post">
+                        <input class="form-control flex-fill mr-1" type="text" name="option_text">
+                        <input class="btn btn-outline-success" type="submit" name="option_add" value="Добавить">
+                    </form>
+                </li>
+            </ol>
+        </div>
+    </div>
 {% endblock %}

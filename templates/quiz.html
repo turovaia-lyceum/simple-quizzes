@@ -1,20 +1,38 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <h2>{{ quiz.name }}</h2>
-    <h3>{{ question.text }}</h3>
-    <form>
-        {% for opt in options %}
-            <input type="hidden" name="options[]" value="{{ opt }}">
-        {% endfor %}
+{% block nav %}
+    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Главная</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+        <a href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">{{ quiz.name }}</a>
+    </li>
+{% endblock %}
 
-        <input type="hidden" name="question" value="{{ question.id }}">
-        {% for option in question.options %}
-            <label>
-                <input type="radio" name="option" value="{{ option.id }}">{{ option.text }}<br>
-            </label>
-        {% endfor %}
-        <input type="hidden" name="submitted">
-        <input type="submit" value="Следующий">
-    </form>
+{% block content %}
+    <div class="card">
+        <h2 class="card-header">{{ quiz.name }}</h2>
+
+        <div class="card-body">
+            <h3 class="card-title">{{ question.text }}</h3>
+            <form>
+                {% for opt in options %}
+                    <input type="hidden" name="options[]" value="{{ opt }}">
+                {% endfor %}
+
+                <input type="hidden" name="question" value="{{ question.id }}">
+
+                <ul class="list-group mb-2">
+                    {% for option in question.options %}
+                        <label class="list-group-item mb-0">
+                            <input type="radio" name="option" value="{{ option.id }}"
+                                   {% if loop.first %}checked{% endif %}> {{ option.text }}
+                        </label>
+                    {% endfor %}
+                </ul>
+                <input type="hidden" name="submitted">
+                <input class="btn btn-outline-success btn-block" type="submit" value="Следующий">
+                <a class="btn btn-outline-danger btn-block" href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">Начать
+                    сначала</a>
+            </form>
+        </div>
+    </div>
 {% endblock %}
