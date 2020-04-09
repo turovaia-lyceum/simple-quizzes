@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from pymorphy2 import MorphAnalyzer
 
 from data import db_session
 from data.option import Option
@@ -10,6 +11,7 @@ app = Flask('Quiz app')
 
 def main():
     db_session.global_init("db/quizzes.sqlite")
+    morph = MorphAnalyzer()
 
     @app.route('/')
     @app.route('/quizzes')
@@ -47,7 +49,8 @@ def main():
 
             if not next_question:
                 right_cnt = len(session.query(Option).filter(Option.id.in_(options), Option.is_answer).all())
-                return render_template('results.html', quiz=quiz, score=right_cnt)
+                score_noun = morph.parse('балл')[0].make_agree_with_number(right_cnt).word
+                return render_template('results.html', quiz=quiz, score=right_cnt, score_noun=score_noun)
 
         return render_template('quiz.html', quiz=quiz, question=next_question, options=options)
 

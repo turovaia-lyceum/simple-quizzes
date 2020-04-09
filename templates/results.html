@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-header">{{ quiz.name }}</div>
         <div class="card-body">
-            <p>Вы ответили на все вопросы. Ваш результат {{ score }} баллов!</p>
+            <p>Вы ответили на все вопросы. Ваш результат {{ score }} {{ score_noun }}!</p>
             <a class="btn btn-outline-primary btn-block" href="{{ url_for('show_quiz', quiz_id=quiz.id) }}">Пройти еще
                 раз</a>
         </div>
