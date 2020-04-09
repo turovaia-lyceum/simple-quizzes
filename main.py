@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, redirect, url_for
 from pymorphy2 import MorphAnalyzer
 
@@ -162,8 +164,8 @@ def main():
 
         return redirect(url_for('edit_quiz', quiz_id=quiz_id))
 
-    app.debug = True
-    app.run()
+    port = int(os.environ.get('PORT', 5001))
+    app.run('0.0.0.0', port)
 
 
 def fill_data():
